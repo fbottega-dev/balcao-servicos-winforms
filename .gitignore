@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+packages/
+artifacts/
+.vs/
+*.user
+*.suo
+*.log
+*.mdf
+*.ldf
+*.Local.config
+TestResult.xml
+TestResult.VisualState.xml
