@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F37DE882-FD36-4A48-A701-1091AB98A006}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Balcao.Integracao</RootNamespace>
+    <AssemblyName>Balcao.Integracao</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>5</LangVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkRootPath Condition="Exists('..\..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\.NETFramework\v4.8')">$(MSBuildProjectDirectory)\..\..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\</TargetFrameworkRootPath>
+    <EnableFrameworkPathOverride>false</EnableFrameworkPathOverride>
+    <NoStdLib>true</NoStdLib>
+
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols><DebugType>full</DebugType>
+    <Optimize>false</Optimize><OutputPath>bin\Debug\</OutputPath><DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType><Optimize>true</Optimize><OutputPath>bin\Release\</OutputPath><DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib"><Private>False</Private></Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="nunit.framework"><HintPath>..\..\packages\NUnit.3.14.0\lib\net45\nunit.framework.dll</HintPath><Private>True</Private></Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Balcao.Dominio\Balcao.Dominio.csproj"><Project>{F37DE882-FD36-4A48-A701-1091AB98A001}</Project><Name>Balcao.Dominio</Name></ProjectReference>
+    <ProjectReference Include="..\..\src\Balcao.Dados\Balcao.Dados.csproj"><Project>{F37DE882-FD36-4A48-A701-1091AB98A002}</Project><Name>Balcao.Dados</Name></ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="**\*.cs" Exclude="obj\**\*;bin\**\*" />
+    <None Include="packages.config" />
+
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

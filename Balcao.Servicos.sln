@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balcao.Dominio", "src\Balcao.Dominio\Balcao.Dominio.csproj", "{F37DE882-FD36-4A48-A701-1091AB98A001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balcao.Dados", "src\Balcao.Dados\Balcao.Dados.csproj", "{F37DE882-FD36-4A48-A701-1091AB98A002}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balcao.Apresentacao", "src\Balcao.Apresentacao\Balcao.Apresentacao.csproj", "{F37DE882-FD36-4A48-A701-1091AB98A003}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balcao.WinForms", "src\Balcao.WinForms\Balcao.WinForms.csproj", "{F37DE882-FD36-4A48-A701-1091AB98A004}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balcao.Tests", "tests\Balcao.Tests\Balcao.Tests.csproj", "{F37DE882-FD36-4A48-A701-1091AB98A005}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balcao.Integracao", "tests\Balcao.Integracao\Balcao.Integracao.csproj", "{F37DE882-FD36-4A48-A701-1091AB98A006}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F37DE882-FD36-4A48-A701-1091AB98A001}.Debug|Any CPU.ActiveCfg = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A001}.Debug|Any CPU.Build.0 = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A001}.Release|Any CPU.ActiveCfg = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A001}.Release|Any CPU.Build.0 = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A002}.Debug|Any CPU.ActiveCfg = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A002}.Debug|Any CPU.Build.0 = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A002}.Release|Any CPU.ActiveCfg = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A002}.Release|Any CPU.Build.0 = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A003}.Debug|Any CPU.ActiveCfg = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A003}.Debug|Any CPU.Build.0 = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A003}.Release|Any CPU.ActiveCfg = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A003}.Release|Any CPU.Build.0 = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A004}.Debug|Any CPU.ActiveCfg = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A004}.Debug|Any CPU.Build.0 = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A004}.Release|Any CPU.ActiveCfg = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A004}.Release|Any CPU.Build.0 = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A005}.Debug|Any CPU.ActiveCfg = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A005}.Debug|Any CPU.Build.0 = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A005}.Release|Any CPU.ActiveCfg = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A005}.Release|Any CPU.Build.0 = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A006}.Debug|Any CPU.ActiveCfg = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A006}.Debug|Any CPU.Build.0 = Debug|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A006}.Release|Any CPU.ActiveCfg = Release|AnyCPU
+		{F37DE882-FD36-4A48-A701-1091AB98A006}.Release|Any CPU.Build.0 = Release|AnyCPU
+	EndGlobalSection
+EndGlobal

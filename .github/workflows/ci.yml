@@ -1,0 +1,43 @@
+name: WinForms CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - uses: NuGet/setup-nuget@v2
+        with:
+          nuget-version: '6.14.x'
+      - name: Compilar com MSBuild e testar regras
+        shell: powershell
+        run: ./build.ps1
+      - name: Preparar SQL Server LocalDB
+        shell: powershell
+        run: |
+          sqllocaldb start MSSQLLocalDB
+          if ($LASTEXITCODE -ne 0) { throw 'LocalDB não iniciou.' }
+          ./scripts/PrepararBanco.ps1 -NomeBanco BalcaoServicos_CI
+      - name: Testar persistência e concorrência no SQL Server
+        shell: powershell
+        env:
+          BALCAO_TEST_CONNECTION_STRING: 'Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=BalcaoServicos_CI;Integrated Security=True;Connect Timeout=15;'
+        run: ./scripts/TestarIntegracao.ps1
+      - name: Montar aplicativo
+        shell: powershell
+        run: Compress-Archive -Path src/Balcao.WinForms/bin/Release/* -DestinationPath artifacts/BalcaoServicos.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BalcaoServicos-Windows
+          path: artifacts/BalcaoServicos.zip
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: resultados-testes
+          path: artifacts/*.xml
