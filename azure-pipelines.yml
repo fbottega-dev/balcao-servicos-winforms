@@ -1,0 +1,30 @@
+trigger:
+  - main
+pr:
+  - main
+pool:
+  vmImage: windows-2022
+steps:
+  - task: NuGetToolInstaller@1
+    inputs:
+      versionSpec: 6.14.x
+  - powershell: ./build.ps1
+    displayName: MSBuild e testes unitários
+  - powershell: |
+      sqllocaldb start MSSQLLocalDB
+      if ($LASTEXITCODE -ne 0) { throw 'LocalDB não iniciou.' }
+      ./scripts/PrepararBanco.ps1 -NomeBanco BalcaoServicos_CI
+      ./scripts/TestarIntegracao.ps1
+    displayName: Integração com SQL Server
+    env:
+      BALCAO_TEST_CONNECTION_STRING: 'Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=BalcaoServicos_CI;Integrated Security=True;Connect Timeout=15;'
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: NUnit
+      testResultsFiles: artifacts/*.xml
+      failTaskOnFailedTests: true
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: src/Balcao.WinForms/bin/Release
+      ArtifactName: BalcaoServicos-Windows
