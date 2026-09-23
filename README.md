@@ -22,6 +22,8 @@ Uma ordem passa de **Aberta → Em andamento → Concluída**. O cancelamento é
 
 ## Rodar no Windows
 
+Para experimentar sem compilar, baixe o ZIP em [Releases](https://github.com/fbottega-dev/balcao-servicos-winforms/releases/latest), extraia a pasta inteira e abra `iniciar-demo.cmd`. É necessário ter o .NET Framework 4.8 instalado.
+
 Para compilar, tenha o .NET Framework 4.8 e o [NuGet CLI 6.14](https://dist.nuget.org/win-x86-commandline/v6.14.0/nuget.exe). Salve o `nuget.exe`, por exemplo, em `C:\ferramentas`. O script procura o MSBuild do Visual Studio/Build Tools e, como alternativa, o MSBuild do próprio .NET Framework instalado no Windows. As referências de compilação do Framework 4.8 são restauradas pelo NuGet.
 
 No PowerShell, dentro da pasta do projeto:
