@@ -5,10 +5,10 @@
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Data
 $connectionBuilder = New-Object System.Data.SqlClient.SqlConnectionStringBuilder
-$connectionBuilder.DataSource = $Servidor
-$connectionBuilder.InitialCatalog = 'master'
-$connectionBuilder.IntegratedSecurity = $true
-$connectionBuilder.ConnectTimeout = 15
+$connectionBuilder['Data Source'] = $Servidor
+$connectionBuilder['Initial Catalog'] = 'master'
+$connectionBuilder['Integrated Security'] = $true
+$connectionBuilder['Connect Timeout'] = 15
 $connection = New-Object System.Data.SqlClient.SqlConnection($connectionBuilder.ConnectionString)
 try {
     $connection.Open()
