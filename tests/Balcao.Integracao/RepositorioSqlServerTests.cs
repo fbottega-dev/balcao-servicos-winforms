@@ -90,6 +90,23 @@ DELETE FROM dbo.Clientes WHERE Id = @clienteId;";
         }
 
         [Test]
+        public void CorrecaoDoClienteApareceEmOutraConexaoSemRecriarAsOrdens()
+        {
+            var ordem = servico.AbrirOrdem(cliente.Id, "Notebook", "Bateria não carrega");
+            servico.AtualizarCliente(cliente.Id, "Maria Souza " + identificador, null);
+
+            var outroRepositorio = new RepositorioSqlServer(connectionString);
+            var salvo = outroRepositorio.ObterCliente(cliente.Id);
+            var ordemSalva = outroRepositorio.ListarOrdens("Maria Souza " + identificador, null).Single();
+
+            Assert.That(salvo.Id, Is.EqualTo(cliente.Id));
+            Assert.That(salvo.Telefone, Is.EqualTo(string.Empty));
+            Assert.That(ordemSalva.Id, Is.EqualTo(ordem.Id));
+            Assert.That(ordemSalva.ClienteNome, Is.EqualTo(salvo.Nome));
+            Assert.That(outroRepositorio.ListarHistorico(ordem.Id).Count, Is.EqualTo(1));
+        }
+
+        [Test]
         public void OutroRepositorioRecarregaClienteOrdemEHistoricoPersistidos()
         {
             var ordem = servico.AbrirOrdem(cliente.Id, "Notebook", "Bateria não carrega");

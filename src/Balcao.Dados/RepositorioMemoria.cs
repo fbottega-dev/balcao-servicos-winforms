@@ -24,6 +24,15 @@ namespace Balcao.Dados
             }
         }
 
+        public Cliente ObterCliente(int id)
+        {
+            lock (trava)
+            {
+                var cliente = clientes.SingleOrDefault(item => item.Id == id);
+                return cliente == null ? null : CopiarCliente(cliente);
+            }
+        }
+
         public IList<OrdemResumo> ListarOrdens(string busca, SituacaoOrdem? situacao)
         {
             busca = (busca ?? string.Empty).Trim();
@@ -62,6 +71,18 @@ namespace Balcao.Dados
             {
                 cliente.Id = clientes.Count + 1;
                 clientes.Add(CopiarCliente(cliente));
+            }
+        }
+
+        public void AtualizarCliente(Cliente cliente)
+        {
+            lock (trava)
+            {
+                var registro = clientes.SingleOrDefault(item => item.Id == cliente.Id);
+                if (registro == null)
+                    throw new RegraNegocioException("O cliente não foi encontrado. Atualize a lista e tente novamente.");
+                registro.Nome = cliente.Nome;
+                registro.Telefone = cliente.Telefone;
             }
         }
 

@@ -22,9 +22,11 @@ namespace Balcao.WinForms
         private readonly Button concluir = Tema.Botao("Concluir", true);
         private readonly Button cancelar = Tema.Botao("Cancelar ordem", false);
         private readonly Button historico = Tema.Botao("Detalhes e histórico", false);
+        private readonly Button editarCliente = Tema.Botao("Editar cliente", false);
 
         public event EventHandler AtualizarSolicitado;
         public event EventHandler NovoClienteSolicitado;
+        public event EventHandler EditarClienteSolicitado;
         public event EventHandler NovaOrdemSolicitada;
         public event EventHandler IniciarSolicitado;
         public event EventHandler ConcluirSolicitado;
@@ -234,11 +236,14 @@ namespace Balcao.WinForms
             cancelar.Name = "cancelar";
             historico.Name = "historico";
             historico.Width = 184;
+            editarCliente.Name = "editarCliente";
+            editarCliente.Width = 130;
             iniciar.Click += delegate { Disparar(IniciarSolicitado); };
             concluir.Click += delegate { Disparar(ConcluirSolicitado); };
             cancelar.Click += delegate { Disparar(CancelarSolicitado); };
             historico.Click += delegate { Disparar(HistoricoSolicitado); };
-            acoes.Controls.AddRange(new Control[] { iniciar, concluir, cancelar, historico });
+            editarCliente.Click += delegate { Disparar(EditarClienteSolicitado); };
+            acoes.Controls.AddRange(new Control[] { iniciar, concluir, cancelar, historico, editarCliente });
             return acoes;
         }
 
@@ -254,6 +259,7 @@ namespace Balcao.WinForms
             concluir.Enabled = ordem != null && ordem.Situacao == SituacaoOrdem.EmAndamento;
             cancelar.Enabled = ordem != null && (ordem.Situacao == SituacaoOrdem.Aberta || ordem.Situacao == SituacaoOrdem.EmAndamento);
             historico.Enabled = ordem != null;
+            editarCliente.Enabled = ordem != null;
             selecao.Text = ordem == null ? "Nenhuma ordem selecionada." : "Selecionada: #" + ordem.Id + " · " + ordem.ClienteNome + " · " + ordem.Equipamento;
         }
 
@@ -307,6 +313,11 @@ namespace Balcao.WinForms
         public void ExibirCadastroCliente(Func<string, string, bool> salvar)
         {
             using (var formulario = new ClienteForm(salvar)) formulario.ShowDialog(this);
+        }
+
+        public void ExibirEdicaoCliente(Cliente cliente, Func<string, string, bool> salvar)
+        {
+            using (var formulario = new ClienteForm(cliente, salvar)) formulario.ShowDialog(this);
         }
 
         public void ExibirNovaOrdem(IList<Cliente> clientes, Func<int, string, string, bool> salvar)
