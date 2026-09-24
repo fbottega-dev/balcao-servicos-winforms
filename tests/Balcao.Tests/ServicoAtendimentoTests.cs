@@ -55,6 +55,40 @@ namespace Balcao.Tests
         }
 
         [Test]
+        public void CorrecaoDeClienteMantemIdentidadeEOrdens()
+        {
+            var cliente = servico.CadastrarCliente("Maria Costa", "41998887777");
+            var ordem = servico.AbrirOrdem(cliente.Id, "Notebook", "Tela fica preta");
+
+            servico.AtualizarCliente(cliente.Id, "  Maria Souza  ", "  (41) 99999-1234  ");
+
+            Assert.That(servico.ObterCliente(cliente.Id).Nome, Is.EqualTo("Maria Souza"));
+            Assert.That(servico.ObterCliente(cliente.Id).Telefone, Is.EqualTo("(41) 99999-1234"));
+            Assert.That(servico.ObterOrdem(ordem.Id).ClienteId, Is.EqualTo(cliente.Id));
+            Assert.That(servico.ListarOrdens("Maria Souza", null).Single().Id, Is.EqualTo(ordem.Id));
+            Assert.That(servico.ListarHistorico(ordem.Id).Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CorrecaoInvalidaNaoAlteraOsDadosExistentes()
+        {
+            var cliente = servico.CadastrarCliente("Maria Costa", "41998887777");
+
+            Assert.Throws<RegraNegocioException>(delegate { servico.AtualizarCliente(cliente.Id, " ", "123"); });
+            Assert.Throws<RegraNegocioException>(delegate { servico.AtualizarCliente(cliente.Id, "Maria Souza", "123456789012345678901"); });
+
+            Assert.That(servico.ObterCliente(cliente.Id).Nome, Is.EqualTo("Maria Costa"));
+            Assert.That(servico.ObterCliente(cliente.Id).Telefone, Is.EqualTo("41998887777"));
+        }
+
+        [Test]
+        public void ClienteInexistenteNaoPodeSerAtualizado()
+        {
+            Assert.Throws<RegraNegocioException>(delegate { servico.AtualizarCliente(999, "Maria Souza", ""); });
+            Assert.That(servico.ListarClientes(), Is.Empty);
+        }
+
+        [Test]
         public void AtendimentoPrecisaSerIniciadoAntesDaConclusao()
         {
             var ordem = AbrirOrdem();

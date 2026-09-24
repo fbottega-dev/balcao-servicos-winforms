@@ -13,12 +13,15 @@ Veja também o [cadastro de uma ordem](docs/nova-ordem.png) e os [detalhes do at
 ## O que dá para fazer
 
 - Cadastrar clientes e abrir ordens com equipamento e descrição do problema.
+- Corrigir nome e telefone do cliente de uma ordem. O nome atualizado aparece em todas as ordens desse cliente.
 - Buscar por cliente, equipamento ou descrição e filtrar pela situação.
 - Iniciar um atendimento, concluir com valor e observação ou cancelar informando o motivo.
 - Consultar o problema informado pelo cliente e o histórico da ordem, incluindo abertura e mudanças de situação.
 - Experimentar a aplicação sem instalar banco, usando o modo demonstração.
 
 Uma ordem passa de **Aberta → Em andamento → Concluída**. O cancelamento é permitido enquanto ela estiver aberta ou em andamento. Uma ordem encerrada não recebe novas alterações de situação.
+
+A lista inicia sem uma ordem selecionada. Depois de usar os filtros, as ações só ficam disponíveis quando você seleciona uma linha; se a ordem selecionada ainda aparecer no resultado, ela continua marcada.
 
 ## Rodar no Windows
 
@@ -73,6 +76,8 @@ A variável vale para os processos abertos a partir desse terminal. Ao distribui
 | `Balcao.Integracao` | Persistência, filtros e concorrência em um SQL Server real. |
 
 O MVP permite testar o fluxo sem abrir uma janela. Os formulários de cadastro herdam de `FormularioBase`, que reúne a estrutura compartilhada. A interface `IRepositorioAtendimento` permite usar as mesmas regras nos modos SQL Server e demonstração.
+
+Para corrigir um contato, selecione uma ordem e clique em **Editar cliente**. Os campos abrem preenchidos; salvar altera o cadastro compartilhado, sem recriar as ordens ou seu histórico. Se você estiver buscando pelo nome antigo, limpe o filtro para encontrar o novo.
 
 No banco, uma ordem pertence a um cliente e possui vários registros de histórico. A coluna `rowversion` evita salvar uma versão que outra operação já alterou. A mudança de situação e seu histórico são gravados na mesma transação.
 

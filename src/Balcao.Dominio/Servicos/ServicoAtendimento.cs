@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Balcao.Dominio.Modelos;
 using Balcao.Dominio.Repositorios;
 
@@ -22,6 +21,14 @@ namespace Balcao.Dominio.Servicos
         public IList<Cliente> ListarClientes()
         {
             return repositorio.ListarClientes();
+        }
+
+        public Cliente ObterCliente(int clienteId)
+        {
+            var cliente = repositorio.ObterCliente(clienteId);
+            if (cliente == null)
+                throw new RegraNegocioException("O cliente não foi encontrado. Atualize a lista e tente novamente.");
+            return cliente;
         }
 
         public IList<OrdemResumo> ListarOrdens(string busca, SituacaoOrdem? situacao)
@@ -49,18 +56,26 @@ namespace Balcao.Dominio.Servicos
         public Cliente CadastrarCliente(string nome, string telefone)
         {
             nome = ValidarTexto(nome, "O nome", 2, 80);
-            telefone = (telefone ?? string.Empty).Trim();
-            if (telefone.Length > 20)
-                throw new RegraNegocioException("O telefone deve ter até 20 caracteres.");
+            telefone = ValidarTelefone(telefone);
 
             var cliente = new Cliente { Nome = nome, Telefone = telefone };
             repositorio.AdicionarCliente(cliente);
             return cliente;
         }
 
+        public void AtualizarCliente(int clienteId, string nome, string telefone)
+        {
+            nome = ValidarTexto(nome, "O nome", 2, 80);
+            telefone = ValidarTelefone(telefone);
+            var cliente = ObterCliente(clienteId);
+            cliente.Nome = nome;
+            cliente.Telefone = telefone;
+            repositorio.AtualizarCliente(cliente);
+        }
+
         public OrdemServico AbrirOrdem(int clienteId, string equipamento, string descricao)
         {
-            if (!repositorio.ListarClientes().Any(cliente => cliente.Id == clienteId))
+            if (repositorio.ObterCliente(clienteId) == null)
                 throw new RegraNegocioException("Selecione um cliente cadastrado.");
 
             equipamento = ValidarTexto(equipamento, "O equipamento", 2, 80);
@@ -131,6 +146,14 @@ namespace Balcao.Dominio.Servicos
             if (texto.Length < minimo || texto.Length > maximo)
                 throw new RegraNegocioException(campo + " deve ter de " + minimo + " a " + maximo + " caracteres.");
             return texto;
+        }
+
+        private static string ValidarTelefone(string telefone)
+        {
+            telefone = (telefone ?? string.Empty).Trim();
+            if (telefone.Length > 20)
+                throw new RegraNegocioException("O telefone deve ter até 20 caracteres.");
+            return telefone;
         }
     }
 }

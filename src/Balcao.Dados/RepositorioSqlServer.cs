@@ -28,6 +28,14 @@ namespace Balcao.Dados
             }
         }
 
+        public Cliente ObterCliente(int id)
+        {
+            using (var banco = new AtendimentoContext(connectionString))
+            {
+                return banco.Clientes.AsNoTracking().SingleOrDefault(item => item.Id == id);
+            }
+        }
+
         public IList<OrdemResumo> ListarOrdens(string busca, SituacaoOrdem? situacao)
         {
             busca = (busca ?? string.Empty).Trim();
@@ -81,6 +89,19 @@ namespace Balcao.Dados
             using (var banco = new AtendimentoContext(connectionString))
             {
                 banco.Clientes.Add(cliente);
+                banco.SaveChanges();
+            }
+        }
+
+        public void AtualizarCliente(Cliente cliente)
+        {
+            using (var banco = new AtendimentoContext(connectionString))
+            {
+                var registro = banco.Clientes.SingleOrDefault(item => item.Id == cliente.Id);
+                if (registro == null)
+                    throw new RegraNegocioException("O cliente não foi encontrado. Atualize a lista e tente novamente.");
+                registro.Nome = cliente.Nome;
+                registro.Telefone = cliente.Telefone;
                 banco.SaveChanges();
             }
         }

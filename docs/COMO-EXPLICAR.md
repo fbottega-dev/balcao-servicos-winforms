@@ -13,6 +13,7 @@ Antes de apresentar o código, execute o programa e percorra uma ordem completa.
 5. Abra o histórico e confira o problema original, a abertura, o início e a conclusão.
 6. Cadastre outra ordem e cancele com um motivo. Compare os dois históricos.
 7. Busque pelo cliente e aplique um filtro de situação.
+8. Selecione uma ordem, edite o nome do cliente e confira que a correção aparece em todas as ordens dele.
 
 Explique que o modo demonstração perde os dados ao fechar. Para demonstrar persistência, execute sem `--demo`, usando o SQL Server, feche e reabra o programa.
 
@@ -27,6 +28,10 @@ Use **Iniciar atendimento** como exemplo e acompanhe estes arquivos:
 5. O presenter atualiza a lista e a tela informa que o atendimento começou.
 
 A regra fica no serviço porque precisa valer mesmo que outra tela venha a chamar a mesma operação. O botão desabilitado ajuda o usuário, mas a validação continua existindo fora da interface.
+
+No WinForms, trocar a fonte da tabela pode selecionar a primeira linha automaticamente. `MainForm.ExibirOrdens` limpa essa seleção depois da busca e só restaura o ID escolhido antes quando ele ainda aparece na lista. Assim, filtrar ordens não habilita ações para outro atendimento por acidente.
+
+Na edição do cliente, o presenter usa o ID da ordem para localizar o cliente. O serviço valida os campos antes de salvar. A lista consulta novamente o repositório e mostra o nome corrigido em todas as ordens do mesmo cliente; os registros de atendimento continuam ligados ao mesmo ID.
 
 ## Onde aparecem os fundamentos de C#
 

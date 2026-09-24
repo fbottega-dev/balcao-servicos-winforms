@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Balcao.Apresentacao;
 using Balcao.Dados;
 using Balcao.Dominio.Modelos;
@@ -107,16 +108,58 @@ namespace Balcao.Tests
         }
 
         [Test]
+        public void EditarClienteDaOrdemAtualizaTodasAsListagens()
+        {
+            var cliente = servico.CadastrarCliente("Marina Costa", "41990000000");
+            var primeira = servico.AbrirOrdem(cliente.Id, "Notebook", "Bateria não carrega");
+            servico.AbrirOrdem(cliente.Id, "Monitor", "Imagem fica piscando");
+            tela.OrdemSelecionadaId = primeira.Id;
+            tela.SolicitarEdicaoCliente();
+
+            Assert.That(tela.ClienteEmEdicao.Nome, Is.EqualTo("Marina Costa"));
+            Assert.That(tela.ClienteEmEdicao.Telefone, Is.EqualTo("41990000000"));
+            Assert.That(tela.SalvarEdicao("Marina Souza", "41991112222"), Is.True);
+            Assert.That(tela.Ordens.Count, Is.EqualTo(2));
+            Assert.That(tela.Ordens.All(x => x.ClienteNome == "Marina Souza"), Is.True);
+            Assert.That(servico.ObterCliente(cliente.Id).Telefone, Is.EqualTo("41991112222"));
+        }
+
+        [Test]
+        public void EdicaoInvalidaPermiteCorrigirSemAlterarCliente()
+        {
+            var cliente = servico.CadastrarCliente("Marina Costa", "41990000000");
+            var ordem = servico.AbrirOrdem(cliente.Id, "Notebook", "Bateria não carrega");
+            tela.OrdemSelecionadaId = ordem.Id;
+            tela.SolicitarEdicaoCliente();
+
+            Assert.That(tela.SalvarEdicao(" ", "41990000000"), Is.False);
+            Assert.That(servico.ObterCliente(cliente.Id).Nome, Is.EqualTo("Marina Costa"));
+            Assert.That(tela.SalvarEdicao("Marina Souza", ""), Is.True);
+            Assert.That(servico.ObterCliente(cliente.Id).Nome, Is.EqualTo("Marina Souza"));
+        }
+
+        [Test]
+        public void EditarClienteExigeOrdemSelecionada()
+        {
+            tela.SolicitarEdicaoCliente();
+
+            Assert.That(tela.SalvarEdicao, Is.Null);
+            Assert.That(tela.Mensagem, Does.Contain("Selecione"));
+        }
+
+        [Test]
         public void DisposeDesligaEventosDaTela()
         {
             presenter.Dispose();
 
             tela.SolicitarAtualizacao();
             tela.SolicitarCadastroCliente();
+            tela.SolicitarEdicaoCliente();
             tela.SolicitarInicio();
 
             Assert.That(tela.Atualizacoes, Is.Zero);
             Assert.That(tela.SalvarCliente, Is.Null);
+            Assert.That(tela.SalvarEdicao, Is.Null);
             Assert.That(tela.Erro, Is.Null);
         }
 
@@ -130,11 +173,14 @@ namespace Balcao.Tests
             public string Mensagem { get; private set; }
             public int Atualizacoes { get; private set; }
             public Func<string, string, bool> SalvarCliente { get; private set; }
+            public Func<string, string, bool> SalvarEdicao { get; private set; }
+            public Cliente ClienteEmEdicao { get; private set; }
             public OrdemServico Detalhes { get; private set; }
             public IList<HistoricoOrdem> Historico { get; private set; }
 
             public event EventHandler AtualizarSolicitado;
             public event EventHandler NovoClienteSolicitado;
+            public event EventHandler EditarClienteSolicitado;
             public event EventHandler NovaOrdemSolicitada;
             public event EventHandler IniciarSolicitado;
             public event EventHandler ConcluirSolicitado;
@@ -153,6 +199,11 @@ namespace Balcao.Tests
             {
                 SalvarCliente = salvar;
             }
+            public void ExibirEdicaoCliente(Cliente cliente, Func<string, string, bool> salvar)
+            {
+                ClienteEmEdicao = cliente;
+                SalvarEdicao = salvar;
+            }
             public void ExibirNovaOrdem(IList<Cliente> clientes, Func<int, string, string, bool> salvar) { }
             public void ExibirConclusao(Func<decimal, string, bool> salvar) { }
             public void ExibirCancelamento(Func<string, bool> salvar) { }
@@ -164,6 +215,7 @@ namespace Balcao.Tests
 
             public void SolicitarAtualizacao() { Disparar(AtualizarSolicitado); }
             public void SolicitarCadastroCliente() { Disparar(NovoClienteSolicitado); }
+            public void SolicitarEdicaoCliente() { Disparar(EditarClienteSolicitado); }
             public void SolicitarInicio() { Disparar(IniciarSolicitado); }
             public void SolicitarHistorico() { Disparar(HistoricoSolicitado); }
 

@@ -17,6 +17,7 @@ namespace Balcao.Apresentacao
             this.servico = servico;
             view.AtualizarSolicitado += AoAtualizar;
             view.NovoClienteSolicitado += AoCadastrarCliente;
+            view.EditarClienteSolicitado += AoEditarCliente;
             view.NovaOrdemSolicitada += AoAbrirOrdem;
             view.IniciarSolicitado += AoIniciar;
             view.ConcluirSolicitado += AoConcluir;
@@ -58,6 +59,27 @@ namespace Balcao.Apresentacao
                     {
                         Atualizar();
                         view.ExibirMensagem("Ordem aberta. Selecione a linha para iniciar o atendimento.");
+                    }
+                    return salvo;
+                });
+            });
+        }
+
+        private void AoEditarCliente(object sender, EventArgs e)
+        {
+            int? id = ObterSelecao();
+            if (!id.HasValue) return;
+            Executar(delegate
+            {
+                var ordem = servico.ObterOrdem(id.Value);
+                var cliente = servico.ObterCliente(ordem.ClienteId);
+                view.ExibirEdicaoCliente(cliente, delegate(string nome, string telefone)
+                {
+                    bool salvo = Executar(delegate { servico.AtualizarCliente(cliente.Id, nome, telefone); });
+                    if (salvo)
+                    {
+                        Atualizar();
+                        view.ExibirMensagem("Cliente atualizado em todas as ordens. Se não aparecer na busca, limpe o filtro.");
                     }
                     return salvo;
                 });
@@ -149,6 +171,7 @@ namespace Balcao.Apresentacao
         {
             view.AtualizarSolicitado -= AoAtualizar;
             view.NovoClienteSolicitado -= AoCadastrarCliente;
+            view.EditarClienteSolicitado -= AoEditarCliente;
             view.NovaOrdemSolicitada -= AoAbrirOrdem;
             view.IniciarSolicitado -= AoIniciar;
             view.ConcluirSolicitado -= AoConcluir;
