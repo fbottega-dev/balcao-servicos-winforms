@@ -211,6 +211,7 @@ namespace Balcao.WinForms
             tabela.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "CriadaEm", HeaderText = "ENTRADA", FillWeight = 13, DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" } });
             tabela.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ValorFinal", HeaderText = "VALOR", FillWeight = 13, DefaultCellStyle = new DataGridViewCellStyle { Format = "C2", FormatProvider = CultureInfo.GetCultureInfo("pt-BR"), NullValue = "—", Alignment = DataGridViewContentAlignment.MiddleRight } });
             tabela.SelectionChanged += delegate { AtualizarSelecao(); };
+            tabela.CurrentCellChanged += delegate { AtualizarSelecao(); };
             tabela.CellDoubleClick += delegate(object sender, DataGridViewCellEventArgs e) { if (e.RowIndex >= 0) Disparar(HistoricoSolicitado); };
             tabela.CellFormatting += delegate(object sender, DataGridViewCellFormattingEventArgs e)
             {
@@ -268,6 +269,10 @@ namespace Balcao.WinForms
             int? idAnterior = OrdemSelecionadaId;
             tabela.DataSource = null;
             tabela.DataSource = ordens;
+            // O DataGridView escolhe a primeira linha automaticamente ao trocar a fonte.
+            // Só mantemos uma seleção feita antes quando a mesma ordem ainda está na lista.
+            tabela.ClearSelection();
+            tabela.CurrentCell = null;
             int totalAbertas = 0, totalAndamento = 0, totalEncerradas = 0;
             foreach (OrdemResumo ordem in ordens)
             {

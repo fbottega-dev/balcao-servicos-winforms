@@ -21,6 +21,8 @@ Veja também o [cadastro de uma ordem](docs/nova-ordem.png) e os [detalhes do at
 
 Uma ordem passa de **Aberta → Em andamento → Concluída**. O cancelamento é permitido enquanto ela estiver aberta ou em andamento. Uma ordem encerrada não recebe novas alterações de situação.
 
+A lista inicia sem uma ordem selecionada. Depois de usar os filtros, as ações só ficam disponíveis quando você seleciona uma linha; se a ordem selecionada ainda aparecer no resultado, ela continua marcada.
+
 ## Rodar no Windows
 
 Para experimentar sem compilar, baixe o ZIP em [Releases](https://github.com/fbottega-dev/balcao-servicos-winforms/releases/latest), extraia a pasta inteira e abra `iniciar-demo.cmd`. É necessário ter o .NET Framework 4.8 instalado.
